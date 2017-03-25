@@ -64,15 +64,18 @@ void TaskAlarmSpeed(void *pvParameters)
 
   for(;;)
   {
-    Serial.println("TASK 3==================");
-    analogWrite(3, 120);   // turn the LED on (HIGH is the voltage level)
-    vTaskDelay( 1000 / portTICK_PERIOD_MS ); // wait for one second
-    analogWrite(3, 0);    // turn the LED off by making the voltage LOW
-    vTaskDelay( 1000 / portTICK_PERIOD_MS ); // wait for one second
-    analogWrite(3, 120);   // turn the LED on (HIGH is the voltage level)
-    vTaskDelay( 1000 / portTICK_PERIOD_MS ); // wait for one second
-    analogWrite(3, 0);    // turn the LED off by making the voltage LOW
-    vTaskDelay( 1000 / portTICK_PERIOD_MS ); // wait for one second
+    Serial.println(" ===== TASK 3");
+    while (speed_flag==0)
+    {
+      analogWrite(3, 120);   // turn the LED on (HIGH is the voltage level)
+      vTaskDelay( 300 / portTICK_PERIOD_MS ); // wait for one second
+      analogWrite(3, 0);    // turn the LED off by making the voltage LOW
+      vTaskDelay( 300 / portTICK_PERIOD_MS ); // wait for one second
+      analogWrite(3, 120);   // turn the LED on (HIGH is the voltage level)
+      vTaskDelay( 300 / portTICK_PERIOD_MS ); // wait for one second
+      analogWrite(3, 0);    // turn the LED off by making the voltage LOW
+      vTaskDelay( 300 / portTICK_PERIOD_MS ); // wait for one second
+    }
   }
 }
 

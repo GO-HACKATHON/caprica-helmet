@@ -1,17 +1,18 @@
 #include <Arduino_FreeRTOS.h>
 
-#define speakerPin 3
+#define speakerPin 3 
+#define InfraredPin "A0"
+
+int helmet_condition;
 
 // define task that we want to use
-// Task Dummy
 void TaskBlink( void *pvParameters );
 void TaskAnalogRead( void *pvParameters );
-
-//Task Real
 void TaskAlarmSpeed( void *pvParameters );
+void TaskReadInfrared( void *pvParameters );
 
-//void TaskReadInfrared( void *pvParameters );
 //void TaskReadAccelero( void *pvParameters );
+//void TaskReadSerial(void *pvParameters);
 
 
 // the setup function runs once when you press reset or power the board
@@ -25,6 +26,14 @@ void setup() {
   }
 
   // Now set up two tasks to run independently.
+  xTaskCreate(
+    TaskReadInfrared
+    , (const portCHAR *) "Infrared"
+    , 128
+    , NULL
+    , 3
+    , NULL);
+
   xTaskCreate(
     TaskAlarmSpeed
     , (const portCHAR *) "Alarm"
@@ -61,6 +70,27 @@ void loop()
 /*---------------------- Tasks ---------------------*/
 /*--------------------------------------------------*/
 
+void TaskReadInfrared(void *pvParameters)
+{
+  (void) pvParameters;
+  pinMode(InfraredPin, OUTPUT);
+
+  for(;;)
+  {
+    Serial.println(" ======= TASK 4");
+    tcrt = analogRead(A0);
+    if(tcrt<700)
+    {
+      helmet_condition = 1;
+    }
+    else
+    {
+      helmet_condition = 0;
+    }
+    vTaskDelay( 1000/ portTICK_PERIOD_MS);
+  }
+}
+
 void TaskAlarmSpeed(void *pvParameters)
 {
   (void) pvParameters;
@@ -68,15 +98,18 @@ void TaskAlarmSpeed(void *pvParameters)
 
   for(;;)
   {
-    Serial.println("TASK 3==================");
-    analogWrite(3, 120);   // turn the LED on (HIGH is the voltage level)
-    vTaskDelay( 1000 / portTICK_PERIOD_MS ); // wait for one second
-    analogWrite(3, 0);    // turn the LED off by making the voltage LOW
-    vTaskDelay( 1000 / portTICK_PERIOD_MS ); // wait for one second
-    analogWrite(3, 120);   // turn the LED on (HIGH is the voltage level)
-    vTaskDelay( 1000 / portTICK_PERIOD_MS ); // wait for one second
-    analogWrite(3, 0);    // turn the LED off by making the voltage LOW
-    vTaskDelay( 1000 / portTICK_PERIOD_MS ); // wait for one second
+    Serial.println(" ===== TASK 3");
+    while (speed_flag==1)
+    {
+      analogWrite(3, 120);   // turn the LED on (HIGH is the voltage level)
+      vTaskDelay( 300 / portTICK_PERIOD_MS ); // wait for one second
+      analogWrite(3, 0);    // turn the LED off by making the voltage LOW
+      vTaskDelay( 300 / portTICK_PERIOD_MS ); // wait for one second
+      analogWrite(3, 120);   // turn the LED on (HIGH is the voltage level)
+      vTaskDelay( 300 / portTICK_PERIOD_MS ); // wait for one second
+      analogWrite(3, 0);    // turn the LED off by making the voltage LOW
+      vTaskDelay( 300 / portTICK_PERIOD_MS ); // wait for one second
+    }
   }
 }
 
