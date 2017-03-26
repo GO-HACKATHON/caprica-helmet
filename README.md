@@ -2,6 +2,8 @@
 
 > Smart helmet for Protection, Comfort, and Data Gathering
 
+<img src="/helmet.jpg" />
+
 # Specification
 
 - Arduino Nano
