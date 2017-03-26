@@ -14,8 +14,6 @@
 MPU6050 accelgyro;
 
 
-
-
 int16_t ax, ay, az;
 int32_t ax32, ay32, az32;
 int16_t gx, gy, gz;
